@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Age Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2782e3;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 520px;
+            margin: 100px auto;
+            background-color: #eee;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+        h4 {
+            font-size: 26px;
+            text-align: center;
+            color: navy;
+            margin-bottom: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            font-size: 18px;
+            color: #1073d0;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #1073d0;
+            border-radius: 5px;
+            font-size: 17px;
+            color: #1073d0;
+            background-color: #f7f7f7;
+        }
+        input[type="number"]:focus {
+            background-color: #ffffff;
+            border-color: orange;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #0761b6;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #003669;
+        }
+        #age {
+            font-size: 23px;
+            color: navy;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h4>Age Calculator</h4>
+    <form onsubmit="calculateAge(event)">
+        <div class="input-group">
+            <div>
+                <label for="date">Date</label>
+                <input type="number" id="date" placeholder="DD" min="1" max="31" required>
+            </div>
+            <div>
+                <label for="month">Month</label>
+                <input type="number" id="month" placeholder="MM" min="1" max="12" required>
+            </div>
+            <div>
+                <label for="year">Year</label>
+                <input type="number" id="year" placeholder="YYYY" min="1900" max="2025" required>
+            </div>
+        </div>
+        <button type="submit">Calculate Age</button>
+    </form>
+    <div id="age"></div>
+</div>
+
+<script>
+function calculateAge(event) {
+    event.preventDefault();
+
+    var d1 = parseInt(document.getElementById('date').value);
+    var m1 = parseInt(document.getElementById('month').value);
+    var y1 = parseInt(document.getElementById('year').value);
+    
+    var today = new Date();
+    var d2 = today.getDate();
+    var m2 = today.getMonth() + 1;
+    var y2 = today.getFullYear();
+
+    // Check for future date input
+    var birthDate = new Date(y1, m1 - 1, d1);
+    if (birthDate > today) {
+        document.getElementById('age').innerHTML = 'Birth date cannot be in the future!';
+        return;
+    }
+
+    // Array for days in each month (considering leap year)
+    var monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    // Leap year adjustment for February
+    if (y1 % 4 === 0 && (y1 % 100 !== 0 || y1 % 400 === 0)) {
+        monthDays[1] = 29;
+    }
+
+    // Calculate age
+    if (d1 > d2) {
+        d2 += monthDays[m2 - 1];
+        m2 -= 1;
+    }
+    if (m1 > m2) {
+        m2 += 12;
+        y2 -= 1;
+    }
+    var d = d2 - d1;
+    var m = m2 - m1;
+    var y = y2 - y1;
+
+    document.getElementById('age').innerHTML = `Your Age is ${y} Years, ${m} Months, and ${d} Days.`;
+}
+</script>
+
+</body>
+</html>
